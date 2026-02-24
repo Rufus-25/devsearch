@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DevSearch</title>
+        <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+    </head>
+
+
+    <body>
+        {% include 'navbar.html' %}
+
+        <br>
+
+        {% block content %}
+        {% endblock %}
+
+        <hr>
+        <h1>Footer</h1>
+    </body>
+</html>
