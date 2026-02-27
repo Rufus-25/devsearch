@@ -2,27 +2,66 @@
 
 {% block content %}
 
-<h1>Projects</h1>
+<!-- Main Section -->
+  <main class="projects">
+    <section class="hero-section text-center">
+      <div class="container container--narrow">
+        <div class="hero-section__box">
+          <h2>Search for <span>Projects</span></h2>
+        </div>
 
-<a href="{% url 'create-project' %}">Create Project</a>
+        <div class="hero-section__search">
+          <form class="form" action="#" method="get">
+            <div class="form__field">
+              <label for="formInput#search">Search By Projects </label>
+              <input class="input input--text" id="formInput#search" type="text" name="text"
+                placeholder="Search by Project Title" />
+            </div>
 
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Total Vote</th>
-        <th>Positive Vote</th>
-    </tr>
+            <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- Search Result: DevList -->
+    <section class="projectsList">
+      <div class="container">
+        <div class="grid grid--three">
 
-    {% for project in projects %}
-    <tr>
-        <td>{{project.title}}</td>
-        <td>{{project.total_vote}}</td>
-        <td>{{project.vote_ratio}}%</td>
-        <td><a href="{% url 'project' project.id %}">View</a></td>
-        <td><a href="{% url 'update-project' project.id %}">Update</a></td>
-        <td><a href="{% url 'delete-project' project.id %}">Delete</a></td>
-    </tr>
-    {% endfor %}
-</table>
+
+
+            {% for project in projects %}
+          <div class="column">
+            <div class="card project">
+              <a href="{% url 'project' project.id %}" class="project">
+                <img class="project__thumbnail" src="{{project.project_image.url}}" alt="project thumbnail" />
+                <div class="card__body">
+                  <h3 class="project__title">{{project.title}}</h3>
+                  <p><a class="project__author" href="">By Dennis Ivanov</a></p>
+                  <p class="project--rating">
+                    <span style="font-weight: bold;">{{project.vote_ratio}}%</span> Postitive
+                    Feedback ({{project.total_vote}} Vote{{project.total_vote|pluralize:"s"}})
+                  </p>
+                  <div class="project__tags">
+
+                    {% for tag in project.tags.all %}
+                    <span class="tag tag--pill tag--main">
+                      <small>{{tag}}</small>
+                    </span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          {% endfor %}
+
+
+        </div>
+      </div>
+    </section>
+
+  </main>
 
 {% endblock %}
