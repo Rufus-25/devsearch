@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 
 from .models import Profile, Skill
 from .forms import CustomUserCreationForm
@@ -58,3 +59,15 @@ def create_user(request):
             return redirect('home')
     context = {'page':page, 'form':form}
     return render(request, 'users/login.html', context)
+
+
+@login_required(login_url='login')
+def user_account(request):
+    profile = request.user.profile
+
+    top_skills = profile.skill_set.exclude(description__exact="")
+    other_skills = profile.skill_set.filter(description="")
+    projects = profile.project_set.all()
+    context = {'profile':profile, 'top_skills':top_skills, 'other_skills':other_skills,
+               'projects':projects}
+    return render(request, 'users/account.html', context)

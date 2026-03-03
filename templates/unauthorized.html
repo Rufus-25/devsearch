@@ -1,0 +1,20 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<!-- Main Section -->
+    <main class="formPage my-xl">
+        <div class="content-box">
+            <div class="formWrapper">
+                <a class="backButton" href="#"><i class="im im-angle-left"></i></a>
+                <br>
+
+                    <p>Seems you are trying to accesss an unauthorized page.</p>
+                    <a class="btn btn--sub btn--lg  my-md" href="{% url 'home' %}">&#x2190 Go Back Home</a>
+                    
+            </div>
+        </div>
+    </main>
+    
+{% endblock %}
