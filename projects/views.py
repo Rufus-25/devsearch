@@ -4,16 +4,15 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Project
 from .forms import ProjectForm
+from .utils import search_projects
 
 # Create your views here.
 def projects(request):
     projects = Project.objects.all()
 
     #The search projects function
-    search_query = ''
-    if request.GET.get('search_query'):
-        search_query = request.GET.get('search_query')
-        projects = Project.objects.filter(title__icontains=search_query)
+    projects, search_query = search_projects(request)
+        
     context = {'projects':projects, 'search_query':search_query}
     return render(request, 'projects/projects.html', context)
 
