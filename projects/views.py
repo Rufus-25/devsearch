@@ -8,7 +8,13 @@ from .forms import ProjectForm
 # Create your views here.
 def projects(request):
     projects = Project.objects.all()
-    context = {'projects':projects}
+
+    #The search projects function
+    search_query = ''
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+        projects = Project.objects.filter(title__icontains=search_query)
+    context = {'projects':projects, 'search_query':search_query}
     return render(request, 'projects/projects.html', context)
 
 

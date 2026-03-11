@@ -4,13 +4,20 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 
 from .models import Profile, Skill
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm
 
 
 # Create your views here.
 def home(request):
     profiles = Profile.objects.all()
-    context = {'profiles':profiles}
+
+    #The search developers function
+    search_query = ''
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+        profiles = Profile.objects.filter(name__icontains=search_query)
+
+    context = {'profiles':profiles, 'search_query':search_query}
     return render(request, 'users/home.html', context)
 
 
@@ -71,3 +78,18 @@ def user_account(request):
     context = {'profile':profile, 'top_skills':top_skills, 'other_skills':other_skills,
                'projects':projects}
     return render(request, 'users/account.html', context)
+
+
+@login_required(login_url='login')
+def edit_profile(request):
+    user = request.user
+    profile = user.profile
+    form = ProfileForm(instance=profile)
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('account')
+    context = {'form':form}
+    return render(request, 'users/edit-profile.html', context)
