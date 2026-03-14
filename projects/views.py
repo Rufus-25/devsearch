@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .models import Project
 from .forms import ProjectForm
-from .utils import search_projects
+from .utils import search_projects, paginateProjects
 
 # Create your views here.
 def projects(request):
@@ -12,8 +13,11 @@ def projects(request):
 
     #The search projects function
     projects, search_query = search_projects(request)
-        
-    context = {'projects':projects, 'search_query':search_query}
+
+    #The paginator function goes here
+    projects, paginator = paginateProjects(request, projects, 3)
+    
+    context = {'projects':projects, 'search_query':search_query, 'paginator':paginator}
     return render(request, 'projects/projects.html', context)
 
 
@@ -31,9 +35,9 @@ def create_project(request):
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid:
             project = form.save(commit=False)
-            project.owner = request.user
+            project.owner = request.user.profile
             form.save()
-            return redirect('/')
+            return redirect('projects')
 
     context = {'form':form}
     return render(request, 'projects/create-project.html', context)

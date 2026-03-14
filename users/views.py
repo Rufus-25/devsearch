@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from .models import Profile, Skill
 from .forms import CustomUserCreationForm, ProfileForm
-from .utils import search_profiles
+from .utils import search_profiles, paginateProfiles
 
 
 # Create your views here.
@@ -16,7 +16,10 @@ def home(request):
     #The search developers function
     profiles, search_query = search_profiles(request)
 
-    context = {'profiles':profiles, 'search_query':search_query}
+    #The paginator goes here
+    profiles, paginator = paginateProfiles(request, profiles, 2)
+
+    context = {'profiles':profiles, 'search_query':search_query, 'paginator':paginator}
     return render(request, 'users/home.html', context)
 
 
@@ -63,26 +66,6 @@ def edit_profile(request):
 
 
 
-def login_user(request):
-    page = 'login'
-
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-        login(request, user)
-        return redirect('home')
-    context = {'page':page}
-    return render(request, 'users/login.html', context)
-
-
-
-def logout_user(request):
-    logout(request)
-    return redirect('login')
-
-
-
 def create_user(request):
     page = 'sign-up'
     form = CustomUserCreationForm()
@@ -99,3 +82,24 @@ def create_user(request):
             return redirect('home')
     context = {'page':page, 'form':form}
     return render(request, 'users/login.html', context)
+
+
+
+def login_user(request):
+    page = 'login'
+
+    if request.method == "POST":
+        username = request.POST["username"].lower()
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        login(request, user)
+        return redirect('home')
+    context = {'page':page}
+    return render(request, 'users/login.html', context)
+
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')
+
