@@ -70,6 +70,6 @@ def delete_project(request, pk):
 
     if request.method == "POST":
         project.delete()
-        return redirect('/')
+        return redirect('profile', request.user.profile.id)
     context = {'object':project}
     return render(request, 'delete.html', context)
