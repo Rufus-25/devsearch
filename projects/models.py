@@ -23,6 +23,19 @@ class Project(models.Model):
     class Meta:
         ordering = ['date']
 
+    @property
+    def reviewers(self):
+        queryset = self.review_set.all().values_list('reviewer__id', flat=True)
+        return queryset
+
+    @property
+    def updateVote(self):
+        self.total_vote = self.review_set.all().count()
+        up_votes = self.review_set.filter(vote_type='up').count()
+        self.vote_ratio = (up_votes / self.total_vote) * 100
+
+        self.save()
+
 
 class Review(models.Model):
     VOTE_TYPE = (
@@ -31,6 +44,7 @@ class Review(models.Model):
     )
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
+    reviewer = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     vote_type = models.CharField(choices=VOTE_TYPE, null=True, blank=True)
     comment = models.TextField(max_length=1600, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
@@ -38,6 +52,9 @@ class Review(models.Model):
 
     def __str__(self):
         return self.vote_type
+    
+    class Meta:
+        unique_together = [['project', 'reviewer']]
 
 
 class Tag(models.Model):

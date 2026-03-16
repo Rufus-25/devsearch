@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .models import Project
-from .forms import ProjectForm
+from .forms import ProjectForm, ReviewForm
 from .utils import search_projects, paginateProjects
 
 # Create your views here.
@@ -23,7 +23,21 @@ def projects(request):
 
 def project(request, pk):
     project = Project.objects.get(id=pk)
-    context = {'project':project}
+    reviews = project.review_set.all()
+    
+    form = ReviewForm()
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.reviewer = request.user.profile
+            review.project = project
+            review.save()
+
+            project.updateVote
+            return redirect('project', project.id)
+
+    context = {'project':project, 'form':form, 'reviews':reviews,}
     return render(request, 'projects/project.html', context)
 
 
@@ -73,3 +87,4 @@ def delete_project(request, pk):
         return redirect('account')
     context = {'object':project}
     return render(request, 'delete.html', context)
+

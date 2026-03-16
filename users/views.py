@@ -90,7 +90,7 @@ def login_user(request):
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
         login(request, user)
-        return redirect('home')
+        return redirect(request.GET['next'] if 'next' in request.GET else 'account')
     context = {'page':page}
     return render(request, 'users/login.html', context)
 

@@ -39,42 +39,44 @@
               {{project.vote_ratio}}% Postitive Feedback ({{project.total_vote}} Vote{{project.total_vote|pluralize:"s"}})
             </h5>
 
-            <form class="form" action="#" method="POST">
-              <!-- Textarea -->
+            {% if request.user.profile.id in project.reviewers %}
+            <p>You already voted on this project</p>
+
+            {% elif request.user.is_authenticated == False %}
+            <p>Only logged in users can review this project </p>
+            <a href="{% url 'login' %}?next={{request.path}}">Login</a>
+
+            {% elif project.owner == request.user.profile %}
+            <p>You cannot review your own project</p>
+
+            {% else %}
+            <form class="form" action="" method="POST">
+              {% csrf_token %}
+              {% for field in form %}
               <div class="form__field">
-                <label for="formInput#textarea">Comments: </label>
-                <textarea class="input input--textarea" name="message" id="formInput#textarea"
-                  placeholder="Write your comments here..."></textarea>
+                <label for="formInput#textarea">{{field.label}}: </label>
+                {{field}}
               </div>
+              {% endfor %}
               <input class="btn btn--sub btn--lg" type="submit" value="Comments" />
             </form>
+            
+            {% endif %}
+
+
             <div class="commentList">
+              
+              {% for review in reviews %}
               <div class="comment">
-                <a href="profile.html">
-                  <img class="avatar avatar--md"
-                    src="https://pbs.twimg.com/profile_images/1335382240931368961/b3wSZKj4_400x400.jpg" alt="user" />
+                <a href="{% url 'profile' review.reviewer.id %}">
+                  <img class="avatar avatar--md" src="{{review.reviewer.profile_image.url}}" alt="user" />
                 </a>
                 <div class="comment__details">
-                  <a href="profile.html" class="comment__author">Sulamita Ivanov</a>
-                  <p class="comment__info">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit alias numquam perferendis
-                    mollitia minus minima exercitationem possimus ab deserunt qui, soluta iusto doloribus eveniet
-                    similique consequuntur ratione, dignissimos ut magni laborum quo.
-                  </p>
+                  <a href="{% url 'profile' review.reviewer.id %}" class="comment__author">{{review.reviewer.name}}</a>
+                  <p class="comment__info">{{review.comment}}</p>
                 </div>
               </div>
-              <div class="comment">
-                <a href="profile.html">
-                  <img class="avatar avatar--md" src="https://avatars.githubusercontent.com/u/33843378" alt="user" />
-                </a>
-                <div class="comment__details">
-                  <a href="profile.html" class="comment__author">Dennis Ivanov</a>
-                  <p class="comment__info">
-                    Consectetur adipisicing elit. Reprehenderit alias numquam perferendis mollitia minus minima
-                    exercitationem possimus ab deserunt qui, ratione, dignissimos ut magni laborum quo.
-                  </p>
-                </div>
-              </div>
+              {% endfor %}
             </div>
           </div>
         </div>
