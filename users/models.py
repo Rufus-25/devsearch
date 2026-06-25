@@ -36,3 +36,22 @@ class Skill(models.Model):
     
     def __str__(self):
         return str(self.name)
+    
+
+class Message(models.Model):
+    sender = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)
+    recipient = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL, related_name="messages")
+    name = models.CharField(max_length=120, null=True, blank=True)
+    email = models.EmailField(max_length=120, null=True, blank=True)
+    subject = models.CharField(max_length=120, null=True, blank=True)
+    body = models.TextField()
+    is_read = models.BooleanField(default=False, null=True)
+    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, 
+                          editable=False, blank=True)
+    
+    def __str__(self):
+        return self.subject
+    
+    class Meta:
+        ordering = ['is_read', '-date']
