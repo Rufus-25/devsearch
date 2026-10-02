@@ -32,7 +32,11 @@ class Project(models.Model):
     def updateVote(self):
         self.total_vote = self.review_set.all().count()
         up_votes = self.review_set.filter(vote_type='up').count()
-        self.vote_ratio = (up_votes / self.total_vote) * 100
+        
+        if self.total_vote > 0:
+            self.vote_ratio = (up_votes / self.total_vote) * 100
+        else:
+            self.vote_ratio = 0
 
         self.save()
 

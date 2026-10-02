@@ -144,9 +144,10 @@ def delete_skill(request, pk):
 @login_required(login_url='login')
 def inbox(request):
     profile = request.user.profile
-    message_requests = profile.messages.all() #not using messages because of flash message
+    message_requests = profile.received_messages.all() #not using messages because of flash message, query with related name
+    sent_messages = profile.sent_messages.all()
     unreadCount = message_requests.filter(is_read=False).count()
-    context = {'message_requests':message_requests, 'unreadCount':unreadCount}
+    context = {'message_requests':message_requests, 'unreadCount':unreadCount, 'sent_messages':sent_messages}
     return render(request, "users/inbox.html", context)
 
 

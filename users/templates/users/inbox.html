@@ -31,5 +31,26 @@
 
       </ul>
     </div>
+
+    <br>
+
+    <div class="content-box">
+      <h3 class="inbox__title">Sent Messages</h3>
+      <ul class="messages">
+
+        {% for message in sent_messages %}
+
+        <li class="message">
+          <a href="{% url 'message' message.id %}">
+            <span class="message__author">{{message.recipient.name}}</span>
+            <span class="message__subject">{{message.subject}}</span>
+            <span class="message__date">{{message.date}}</span>
+          </a>
+        </li>
+
+        {% endfor %}
+
+      </ul>
+    </div>
   </main>
 {% endblock %}
