@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+    background-color: #f1f1f1;
+}
+
+h1 {
+    margin-top: 2em;
+    color:#030303;
+    text-align: center;
+}
+
+#projects--wrapper {
+    margin: 80px auto 0px auto;
+    max-width: 600px;
+    padding: 1em 2em 2em 2em;
+    background-color: #fcfcfc;
+    border-radius: 8px;
+}
+
+.single-project {
+    margin: 2em 0px 2em 0px;
+    padding: 20px 0px 20px 0px;
+}
+
+.project-image {
+    width: 100%;
+    border-radius: 16px;
+}
+
+.vote-btn {
+    background-color: #3d3d3d;
+    color: white;
+    border-radius: 4px;
+    padding: 8px;
+    margin-right: 16px;
+    cursor: pointer;
+    transition-duration: 200ms;
+}
+
+.vote-btn:hover {
+    background-color: #5d5d5d;
+}

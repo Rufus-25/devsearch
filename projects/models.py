@@ -21,7 +21,7 @@ class Project(models.Model):
         return self.title
     
     class Meta:
-        ordering = ['date']
+        ordering = ['-vote_ratio','date']
 
     @property
     def reviewers(self):
