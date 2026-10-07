@@ -1,7 +1,24 @@
 let projectsUrl = 'http://127.0.0.1:8000/api/projects/'
 let projectsWrapper = document.querySelector('#projects--wrapper')
 
-let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzkxMzI5NTU4LCJpYXQiOjE3OTEzMjY4NTgsImp0aSI6IjQxMGFmMmFmYTA0NzRlMTJiYmIyNjE0NmExZDBlODRmIiwidXNlcl9pZCI6IjEifQ.ve4eJG-LfU8USGQ6upN-Yer9rTz8cbzj9HdAIvjWrPs'
+let token = localStorage.getItem('token')
+loginBtn = document.getElementById('login-btn')
+logoutBtn = document.getElementById('logout-btn')
+
+if (token) {
+    loginBtn.remove()
+} else {
+    logoutBtn.remove()
+}
+
+logoutBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+
+    localStorage.removeItem('token')
+    alert('You are now logged out!')
+})
+
+
 
 let getProjects = () => {
 
@@ -18,7 +35,7 @@ let buildProjects = (projects) => {
     projectsWrapper.innerHTML = ''
 
     for (let i=0; i < projects.length; i++) {
-        
+
         project = projects[i]
 
         projectHtml = `
