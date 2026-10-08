@@ -78,7 +78,7 @@
               {% for review in reviews %}
               <div class="comment">
                 <a href="{% url 'profile' review.reviewer.id %}">
-                  <img class="avatar avatar--md" src="{{review.reviewer.profile_image.url}}" alt="user" />
+                  <img class="avatar avatar--md" src="{{review.reviewer.imageURL}}" alt="user" />
                 </a>
                 <div class="comment__details">
                   <a href="{% url 'profile' review.reviewer.id %}" class="comment__author">{{review.reviewer.name}}</a>
