@@ -5,7 +5,7 @@ from users.models import Profile
 
 # Create your models here.
 class Project(models.Model):
-    owner = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=80, blank=True, null=True)
     description = models.TextField(max_length=2000, blank=True, null=True)
     project_image = models.ImageField(null=True, blank=True, default='default.jpg')
@@ -22,6 +22,15 @@ class Project(models.Model):
     
     class Meta:
         ordering = ['-vote_ratio','date']
+
+    #if default project image is deleted and none is uploaded, make it empty
+    @property
+    def imageURL(self):
+        try:
+            url = self.project_image.url
+        except:
+            url = ''
+        return url
 
     @property
     def reviewers(self):
