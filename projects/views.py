@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -22,7 +22,7 @@ def projects(request):
 
 
 def project(request, pk):
-    project = Project.objects.get(id=pk)
+    project = get_object_or_404(Project, id=pk)
     reviews = project.review_set.all()
     
     form = ReviewForm()
@@ -34,8 +34,9 @@ def project(request, pk):
             review.project = project
             review.save()
 
-            project.updateVote
+            project.updateVote()
             return redirect('project', project.id)
+
 
     context = {'project':project, 'form':form, 'reviews':reviews,}
     return render(request, 'projects/project.html', context)
@@ -49,7 +50,7 @@ def create_project(request):
         newtags = request.POST['newtags'].replace(',', ' ').split()
 
         form = ProjectForm(request.POST, request.FILES)
-        if form.is_valid:
+        if form.is_valid():
             project = form.save(commit=False)
             project.owner = request.user.profile
             form.save()
@@ -75,7 +76,7 @@ def update_project(request, pk):
         newtags = request.POST['newtags'].replace(',', ' ').split()
 
         form = ProjectForm(request.POST, request.FILES, instance=project)
-        if form.is_valid:
+        if form.is_valid():
             form.save()
 
             for tag in newtags:

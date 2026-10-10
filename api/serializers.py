@@ -5,7 +5,7 @@ from users.models import Profile
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = ['id', 'name', 'headline', 'profile_image']
 
 
 class TagSerializer(serializers.ModelSerializer):

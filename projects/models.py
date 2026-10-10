@@ -37,7 +37,7 @@ class Project(models.Model):
         queryset = self.review_set.all().values_list('reviewer__id', flat=True)
         return queryset
 
-    @property
+
     def updateVote(self):
         self.total_vote = self.review_set.all().count()
         up_votes = self.review_set.filter(vote_type='up').count()

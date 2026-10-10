@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.utils.http import url_has_allowed_host_and_scheme 
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -90,8 +91,13 @@ def login_user(request):
         username = request.POST["username"].lower()
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
-        login(request, user)
-        return redirect(request.GET['next'] if 'next' in request.GET else 'account')
+        if user is not None:
+            login(request, user)
+            next_url = request.GET.get('next', '')
+            if not url_has_allowed_host_and_scheme(next_url, {request.get_host()}):
+                next_url = 'account'
+            return redirect(next_url)
+        messages.error(request, 'Username or password is incorrect')
     context = {'page':page}
     return render(request, 'users/login.html', context)
 

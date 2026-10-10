@@ -20,7 +20,12 @@
           </div>
 
           {% if project.demo_link %}
-          <a class="singleProject__liveLink" href="{{project.demo_link}}" target="_blank"><i class="im im-external-link"></i>Source Code
+          <a class="singleProject__liveLink" href="{{project.demo_link}}" target="_blank"><i class="im im-external-link"></i>Demo Link
+          </a>
+          {% endif %}
+
+          {% if project.github_link %}
+          <a class="singleProject__liveLink" href="{{project.github_link}}" target="_blank"><i class="im im-external-link"></i>Source Code
           </a>
           {% endif %}
 
