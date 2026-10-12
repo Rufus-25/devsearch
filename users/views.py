@@ -161,8 +161,9 @@ def inbox(request):
 def view_message(request, pk):
     profile = request.user.profile
     message = get_object_or_404(Message.objects.filter(Q(recipient=profile) | Q(sender=profile)), id=pk)
-    message.is_read = True
-    message.save()
+    if message.recipient == profile:
+        message.is_read = True
+        message.save()
     context = {'message':message}
     return render(request, "users/message.html", context)
 
