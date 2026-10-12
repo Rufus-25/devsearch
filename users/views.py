@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.utils.http import url_has_allowed_host_and_scheme 
 from django.contrib import messages
@@ -126,7 +126,7 @@ def create_skill(request):
 @login_required(login_url='login')
 def update_skill(request, pk):
     page = 'update-skill'
-    skill = Skill.objects.get(id=pk)
+    skill = get_object_or_404(Skill, id=pk, owner=request.user.profile)
     form = SkillForm(instance=skill)
     if request.method == "POST":
         form = SkillForm(request.POST, instance=skill)
@@ -139,7 +139,7 @@ def update_skill(request, pk):
 
 @login_required(login_url='login')
 def delete_skill(request, pk):
-    skill = Skill.objects.get(id=pk)
+    skill = get_object_or_404(Skill, id=pk, owner=request.user.profile)
     if request.method == "POST":
         skill.delete()
         return redirect('account')
@@ -159,7 +159,8 @@ def inbox(request):
 
 @login_required(login_url='login')
 def view_message(request, pk):
-    message = Message.objects.get(id=pk)
+    profile = request.user.profile
+    message = get_object_or_404(Message.objects.filter(Q(recipient=profile) | Q(sender=profile)), id=pk)
     message.is_read = True
     message.save()
     context = {'message':message}
