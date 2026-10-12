@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+import json
 
 from .models import Project, Tag
 from .forms import ProjectForm, ReviewForm
@@ -101,3 +104,12 @@ def delete_project(request, pk):
     context = {'object':project}
     return render(request, 'delete.html', context)
 
+
+@login_required(login_url='login')
+@require_POST
+def remove_tag(request):
+    data = json.loads(request.body)
+    project = get_object_or_404(Project, id=data['project'], owner=request.user.profile)
+    tag = get_object_or_404(Tag, id=data['tag'])
+    project.tags.remove(tag)
+    return JsonResponse({'removed': True})
