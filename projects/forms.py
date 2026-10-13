@@ -5,6 +5,10 @@ from .models import Project, Review
 
 
 class ProjectForm(ModelForm):
+
+    demo_link = forms.URLField(required=False)
+    github_link = forms.URLField(required=False)
+    
     class Meta:
         model = Project
         fields = ['title', 'description', 'project_image', 'demo_link', 'github_link']
