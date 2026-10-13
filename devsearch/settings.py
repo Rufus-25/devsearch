@@ -37,8 +37,6 @@ DEBUG = env('DEBUG')
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-DEBUG = env('DEBUG')
-
 # Render sets this automatically once deployed; locally it stays empty
 RENDER_EXTERNAL_HOSTNAME = env('RENDER_EXTERNAL_HOSTNAME', default='')
 
@@ -164,12 +162,6 @@ WSGI_APPLICATION = 'devsearch.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 if env('DATABASE_URL', default=''):
     DATABASES = {'default': env.db('DATABASE_URL')}
@@ -223,8 +215,6 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 EMAIL_TIMEOUT = 10
 if RENDER_EXTERNAL_HOSTNAME:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # emails print to Render's logs for now
-# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 
 
