@@ -1,3 +1,5 @@
+import { API_BASE } from "./config.js";
+
 let loginUser = () => {
     let form = document.getElementById('login-form')
 
@@ -9,7 +11,7 @@ let loginUser = () => {
             'password': form.password.value
         }
 
-        fetch('http://127.0.0.1:8000/api/users/token/', {
+        fetch(`${API_BASE}/api/users/token/`, {
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +25,7 @@ let loginUser = () => {
 
             if (token) {
                 localStorage.setItem('token', token)
-                window.location = 'file:///C:/Users/DELL/Desktop/2026/Dev/devsearch/devsearch-frontend/projects-list.html'
+                window.location = 'projects-list.html'
             } else {
                 alert('Incorrect username or password!')
             }

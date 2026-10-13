@@ -1,9 +1,11 @@
-let projectsUrl = 'http://127.0.0.1:8000/api/projects/'
+import { API_BASE } from "./config.js";
+
+let projectsUrl = `${API_BASE}/api/projects/`
 let projectsWrapper = document.querySelector('#projects--wrapper')
 
 let token = localStorage.getItem('token')
-loginBtn = document.getElementById('login-btn')
-logoutBtn = document.getElementById('logout-btn')
+let loginBtn = document.getElementById('login-btn')
+let logoutBtn = document.getElementById('logout-btn')
 
 if (token) {
     loginBtn.remove()
@@ -36,9 +38,9 @@ let buildProjects = (projects) => {
 
     for (let i=0; i < projects.length; i++) {
 
-        project = projects[i]
+        let project = projects[i]
 
-        projectHtml = `
+        let projectHtml = `
         <div class="single-project">
             <img src="http://127.0.0.1:8000${project.project_image}" class="project-image" />
             <h2>${project.title}</h2>
@@ -64,7 +66,7 @@ let voteProject = () => {
             let projectId = e.target.dataset.projectid
             let voteType = e.target.dataset.votetype
             
-            fetch(`http://127.0.0.1:8000/api/projects/${projectId}/vote/`, {
+            fetch(`${API_BASE}/api/projects/${projectId}/vote/`, {
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
