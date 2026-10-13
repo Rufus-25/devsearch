@@ -50,16 +50,3 @@ def projectVote(request, pk):
     project.updateVote() #update review count to reflect new review
     serializer = ProjectSerializer(project, many=False)
     return Response(serializer.data)
-
-
-# @api_view(['DELETE'])
-# @permission_classes([IsAuthenticated])
-# def removeTag(request):
-#     tagId = request.data['tag']
-#     projectId = request.data['project']
-
-#     project = Project.objects.get(id=projectId)
-#     tag = Tag.objects.get(id=tagId)
-    
-#     project.tags.remove(tag)
-#     return Response("Tag deleted!")

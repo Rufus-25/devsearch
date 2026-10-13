@@ -42,7 +42,7 @@ let buildProjects = (projects) => {
 
         let projectHtml = `
         <div class="single-project">
-            <img src="http://127.0.0.1:8000${project.project_image}" class="project-image" />
+            <img src="${API_BASE}${project.project_image}" class="project-image" />
             <h2>${project.title}</h2>
             <p>${project.description.substring(0, 180)}...</p>
             <p><em>Vote Ratio: ${project.vote_ratio}%</em></p>
