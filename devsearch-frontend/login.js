@@ -25,7 +25,7 @@ let loginUser = () => {
 
             if (token) {
                 localStorage.setItem('token', token)
-                window.location = 'projects-list.html'
+                window.location = 'index.html'
             } else {
                 alert('Incorrect username or password!')
             }

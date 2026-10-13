@@ -1,5 +1,11 @@
 import { API_BASE } from "./config.js";
 
+function escapeHtml(text) {
+    const div = document.createElement('div')
+    div.textContent = text ?? ''
+    return div.innerHTML
+}
+
 function imageSrc(path) {
     if (!path) return `${API_BASE}/static/images/default.jpg`
     return path.startsWith('http') ? path : `${API_BASE}${path}`
@@ -48,8 +54,8 @@ let buildProjects = (projects) => {
         let projectHtml = `
         <div class="single-project">
             <img src="${imageSrc(project.project_image)}" class="project-image" />
-            <h2>${project.title}</h2>
-            <p>${project.description.substring(0, 180)}...</p>
+            <h2>${escapeHtml(project.title)}</h2>
+            <p>${escapeHtml((project.description || '').substring(0, 180))}...</p>
             <p><em>Vote Ratio: ${project.vote_ratio}%</em></p>
             <span class="vote-btn" data-projectid="${project.id}" data-votetype="up"> + </span>
             <span class="vote-btn" data-projectid="${project.id}" data-votetype="down"> - </span>
