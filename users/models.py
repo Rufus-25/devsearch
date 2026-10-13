@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 
+from django.templatetags.static import static
+
 # Create your models here.
 
 class Profile(models.Model):
@@ -12,7 +14,7 @@ class Profile(models.Model):
     headline = models.CharField(max_length=80, null=True, blank=True)
     bio = models.TextField(max_length=2000, null=True, blank=True)
     location = models.CharField(max_length=2000, null=True, blank=True)
-    profile_image = models.ImageField(null=True, blank=True, upload_to="profiles/", default="profiles/user-default.png")
+    profile_image = models.ImageField(null=True, blank=True, upload_to="profiles/")
     social_github = models.CharField(max_length=2000, null=True, blank=True)
     social_linkedin = models.CharField(max_length=2000, null=True, blank=True)
     social_twitter = models.CharField(max_length=2000, null=True, blank=True)
@@ -30,11 +32,9 @@ class Profile(models.Model):
 
     @property
     def imageURL(self):
-        try:
-            url = self.profile_image.url
-        except:
-            url = ''
-        return url
+        if self.profile_image:
+            return self.profile_image.url
+        return static('images/user-default.png')
     
 
 class Skill(models.Model):

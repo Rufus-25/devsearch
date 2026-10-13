@@ -1,6 +1,8 @@
 from django.db import models
 import uuid
 
+from django.templatetags.static import static
+
 from users.models import Profile
 
 # Create your models here.
@@ -8,7 +10,7 @@ class Project(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=80, blank=True, null=True)
     description = models.TextField(max_length=2000, blank=True, null=True)
-    project_image = models.ImageField(null=True, blank=True, default='default.jpg')
+    project_image = models.ImageField(null=True, blank=True)
     demo_link = models.CharField(max_length=2000, blank=True, null=True)
     github_link = models.CharField(max_length=2000, blank=True, null=True)
     tags = models.ManyToManyField('Tag', blank=True)
@@ -26,11 +28,9 @@ class Project(models.Model):
     #if default project image is deleted and none is uploaded, make it empty
     @property
     def imageURL(self):
-        try:
-            url = self.project_image.url
-        except:
-            url = ''
-        return url
+        if self.project_image:
+            return self.project_image.url
+        return static('images/default.jpg')
 
     @property
     def reviewers(self):

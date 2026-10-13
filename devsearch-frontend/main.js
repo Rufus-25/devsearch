@@ -1,5 +1,10 @@
 import { API_BASE } from "./config.js";
 
+function imageSrc(path) {
+    if (!path) return `${API_BASE}/static/images/default.jpg`
+    return path.startsWith('http') ? path : `${API_BASE}${path}`
+}
+
 let projectsUrl = `${API_BASE}/api/projects/`
 let projectsWrapper = document.querySelector('#projects--wrapper')
 
@@ -42,7 +47,7 @@ let buildProjects = (projects) => {
 
         let projectHtml = `
         <div class="single-project">
-            <img src="${API_BASE}${project.project_image}" class="project-image" />
+            <img src="${imageSrc(project.project_image)}" class="project-image" />
             <h2>${project.title}</h2>
             <p>${project.description.substring(0, 180)}...</p>
             <p><em>Vote Ratio: ${project.vote_ratio}%</em></p>
