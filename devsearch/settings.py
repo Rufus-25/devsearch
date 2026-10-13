@@ -254,6 +254,4 @@ if RENDER_EXTERNAL_HOSTNAME:
 # Cloudinary turns on only when its key exists, so local development is unaffected
 CLOUDINARY_URL = env('CLOUDINARY_URL', default='')
 if CLOUDINARY_URL:
-    INSTALLED_APPS.insert(INSTALLED_APPS.index('django.contrib.staticfiles'), 'cloudinary_storage')
-    INSTALLED_APPS.append('cloudinary')
     STORAGES["default"] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
