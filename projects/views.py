@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
@@ -61,6 +62,7 @@ def create_project(request):
             for tag in newtags:
                 tag, created = Tag.objects.get_or_create(name=tag)
                 project.tags.add(tag)
+                messages.success(request, "Project successfully created!")
             return redirect('account')
 
     context = {'form':form}
@@ -85,6 +87,8 @@ def update_project(request, pk):
             for tag in newtags:
                 tag, created = Tag.objects.get_or_create(name=tag)
                 project.tags.add(tag)
+
+            messages.success(request, "Project updated!")
             return redirect('project', project.id)
 
     context = {'form':form, 'project':project}
@@ -100,6 +104,7 @@ def delete_project(request, pk):
 
     if request.method == "POST":
         project.delete()
+        messages.info(request, "Project deleted!")
         return redirect('account')
     context = {'object':project}
     return render(request, 'delete.html', context)

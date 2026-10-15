@@ -59,6 +59,7 @@ def edit_profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
+            messages.success(request, "Profile updated!")
             return redirect('account')
     context = {'form':form}
     return render(request, 'users/edit-profile.html', context)
@@ -78,6 +79,7 @@ def create_user(request):
             user.save()
 
             login(request, user)
+            messages.success(request, "Account successfully created!")
             return redirect('home')
     context = {'page':page, 'form':form}
     return render(request, 'users/login.html', context)
@@ -105,6 +107,7 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
+    messages.info(request, "You are logged out")
     return redirect('login')
 
 
@@ -118,6 +121,7 @@ def create_skill(request):
             skill = form.save(commit=False)
             skill.owner = profile
             form.save()
+            messages.success(request, "Skill created!")
             return redirect('account')
     context = {'form':form}
     return render(request, 'users/skill-form.html', context)
@@ -132,6 +136,7 @@ def update_skill(request, pk):
         form = SkillForm(request.POST, instance=skill)
         if form.is_valid():
             form.save()
+            messages.success(request, "Skill updated!")
             return redirect('account')
     context = {'form':form, 'page':page}
     return render(request, 'users/skill-form.html', context)
@@ -142,6 +147,7 @@ def delete_skill(request, pk):
     skill = get_object_or_404(Skill, id=pk, owner=request.user.profile)
     if request.method == "POST":
         skill.delete()
+        messages.info(request, "Skill deleted!")
         return redirect('account')
     context = {'object':skill}
     return render(request, 'delete.html', context)
