@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 import json
@@ -31,6 +32,8 @@ def project(request, pk):
     
     form = ReviewForm()
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect_to_login(request.get_full_path(), login_url='login')
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
@@ -71,7 +74,7 @@ def create_project(request):
 
 @login_required(login_url='login')
 def update_project(request, pk):
-    project = Project.objects.get(id=pk)
+    project = get_object_or_404(Project, id=pk)
     form = ProjectForm(instance=project)
 
     if request.user.profile != project.owner:
@@ -97,7 +100,7 @@ def update_project(request, pk):
 
 @login_required(login_url='login')
 def delete_project(request, pk):
-    project = Project.objects.get(id=pk)
+    project = get_object_or_404(Project, id=pk)
 
     if request.user.profile != project.owner:
         return render(request, 'unauthorized.html')

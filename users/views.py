@@ -27,7 +27,7 @@ def home(request):
 
 
 def profile(request, pk):
-    profile = Profile.objects.get(id=pk)
+    profile = get_object_or_404(Profile, id=pk)
 
     top_skills = profile.skill_set.exclude(description__exact="")
     other_skills = profile.skill_set.filter(description="")
@@ -175,7 +175,7 @@ def view_message(request, pk):
 
 
 def create_message(request, pk):
-    recipient = Profile.objects.get(id=pk)
+    recipient = get_object_or_404(Profile, id=pk)
     form = MessageForm()
 
     try:
