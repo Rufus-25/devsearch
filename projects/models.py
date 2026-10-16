@@ -23,7 +23,7 @@ class Project(models.Model):
         return self.title
     
     class Meta:
-        ordering = ['-vote_ratio','date']
+        ordering = ['-vote_ratio', '-total_vote','date']
 
     #if default project image is deleted and none is uploaded, make it empty
     @property

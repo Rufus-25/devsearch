@@ -24,7 +24,7 @@ def createProfile(sender, instance, created, **kwargs):
         send_mail(
             subject,
             body,
-            settings.EMAIL_HOST_USER,
+            settings.DEFAULT_FROM_EMAIL,
             [profile.email],
             fail_silently=True,
         )
